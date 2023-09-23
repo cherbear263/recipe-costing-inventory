@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form @submit.prevent="handleSubmit">
     <div class="flex relative">
       <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">category
       </label>
@@ -26,7 +26,7 @@
       <div class="relative w-full">
         <input type="search" id="search-dropdown"
           class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-          placeholder="search for item..." required>
+          placeholder="search for item..." required v-model="itemSearch">
         <button type="submit"
           class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -42,13 +42,18 @@
 
 <script setup>
 const supabase = useSupabaseClient()
-const emit = defineEmits(['changeCategory'])
+const emit = defineEmits(['changeCategory', 'searchItem'])
 const open = ref(false)
+const itemSearch = ref('')
 const category = ref('All Categories')
 const selectCategory = (cat, id) => {
   category.value = cat;
   open.value = false;
   emit('changeCategory', id)
+  return
+}
+const handleSubmit = () => {
+  emit('searchItem', itemSearch)
   return
 }
 const { data: categories, error } = await supabase.from('inventory_categories').select('*').order('name', { ascending: true })

@@ -13,9 +13,10 @@
   <div class="relative overflow-x-auto">
     <h2 class="text-2xl font-semibold mx-auto text-center">Inventory</h2>
     <div class="w-1/2 mx-auto">
-      <SearchDropdown @changeCategory="getCategory" />
+      <SearchDropdown @changeCategory="getCategory" @searchItem="setSearch" />
     </div>
-
+    <div v-if="items && items.data">
+      {{ items.data }}</div>
     <table class="table-auto max-w-full text-sm text-left text-gray-500 dark:text-gray-400 mx-auto">
       <thead class="bg-slate-100 border-1 border-gray-100">
         <tr>
@@ -58,21 +59,27 @@
   </div>
 </template>
 <script setup>
+import debounce from 'lodash.debounce'
 const supabase = useSupabaseClient()
 const orderItems = []
 const ordering = ref(false)
 const qty = []
+let category = 0
+
+let searchItem = ref('')
 const onHand = (last_count, committed) => {
   return last_count - committed
 }
-
+const setSearch = (item) => {
+  console.log(item)
+  searchItem.value = item
+}
 const updateQty = (item, index) => {
   console.log(item, index)
 }
-const getCategory = async (category) => {
-  console.log('emit received ', category)
-  inventory.value = await getInventory(category, null)
-  await refreshNuxtData()
+const getCategory = async (cat) => {
+  console.log('emit received ', cat)
+  category = cat
   return
 }
 const getInventory = async (filter, searchItem) => {
@@ -85,4 +92,24 @@ const getInventory = async (filter, searchItem) => {
 }
 let { data: inventory, error } = await getInventory(null, null)
 // @todo: filter by category, item name
+
+let isSearching = ref(false)
+let items = ref(null)
+const search = async () => {
+  let catNum = category
+  isSearching.value = true
+  items.value = await supabase.from('inventory').select('*').order('item', { ascending: true }).filter('id', 'eq', catNum)
+  isSearching.value = false
+}
+
+watch(() => searchItem.value, async () => {
+  if (!searchItem.value) {
+    setTimeout(() => {
+      items.value = ''
+      isSearching.value = false
+      return
+    }, 500)
+  }
+  search()
+})
 </script>
