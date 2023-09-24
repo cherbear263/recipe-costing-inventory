@@ -1,5 +1,4 @@
 <template>
-  # Hello World!
   <div>
     <p v-for="(item, index) in newLines" :key="index" :class="item.style">{{ item.direction }}</p>
   </div>
@@ -14,9 +13,9 @@ const newLines = []
 for (let i = 0; i < len; i++) {
   if (props.directions[i][0] == '#') {
     // heading - remove # and make bold
-    newLines.push({ direction: props.directions[i].substring(1), style: 'font-semibold text-lg mt-4 mb-2' })
+    newLines.push({ direction: props.directions[i].substring(1), style: 'font-semibold text-md mt-4 mb-1' })
   } else {
-    newLines.push({ direction: props.directions[i], style: 'font-normal text-md' })
+    newLines.push({ direction: props.directions[i], style: 'font-normal text-sm' })
   }
   // else if (directions[i][0] == '-') {
   //   // dot point list - replace - with dot

@@ -24,11 +24,8 @@
           </ul>
         </div>
         <div class="mt-3">
+          <h2 class="font-semibold text-lg">Directions</h2>
           <recipe-directions :directions="directions" />
-          <h2 class="font-semibold text-lg">Directions:</h2>
-          <ul class="list-disc ml-8">
-            <li v-for="direction in form.directions">{{ direction }}</li>
-          </ul>
         </div>
       </div>
       <div class="w-1/2">

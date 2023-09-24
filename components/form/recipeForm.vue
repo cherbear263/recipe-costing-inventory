@@ -62,12 +62,11 @@
 
       <fieldset class="mb-4">
         <form-recipe-ingredients />
-        <label class="text-sm text-gray-400 mb-2 block">Ingredients</label>
-        <textarea rows="3" name="ingredients" required placeholder="rice, beans, ..."
-          class="w-full border border-gray-400 rounded-sm px-4" v-model="ingredients" />
       </fieldset>
       <fieldset class="mb-4">
-        <label class="text-sm text-gray-400 mb-2 block">Directions</label>
+        <label class="text-md font-semibold mb-2 block">Directions <span class="text-gray-400 font-normal"> use '#' for
+            headings - each step on new
+            line</span></label>
         <textarea rows="3" name="directions" required placeholder="- combine flours... "
           class="w-full border border-gray-400 rounded-sm px-4" v-model="directions" />
       </fieldset>
