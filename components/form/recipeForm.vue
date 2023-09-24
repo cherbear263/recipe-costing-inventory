@@ -61,7 +61,7 @@
       </fieldset>
 
       <fieldset class="mb-4">
-        <form-recipe-ingredients />
+        <form-recipe-ingredients :serves="form.serves" :unit="form.unit" />
       </fieldset>
       <fieldset class="mb-4">
         <label class="text-md font-semibold mb-2 block">Directions <span class="text-gray-400 font-normal"> use '#' for

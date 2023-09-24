@@ -21,18 +21,15 @@
 
     <input class="  px-3 py-2 rounded-md bg-green-100 flex-grow text-sm" v-if="!selectedItem.name" disabled
       placeholder="select ingredient above">
-    <input v-else class="bg-gray-100 border-2 border-gray-200 px-3 py-2 text-sm flex-grow"
-      :placeholder="selectedItem.name" />
+    <input v-else class="bg-gray-100 border-2 border-gray-200 px-3 py-2 text-sm" :placeholder="selectedItem.name" />
     <input type="number" class="px-2 py-2 border-2 border-gray-100 bg-green-100 text-gray-800 text-sm rounded-md w-20"
       placeholder="qty" v-model="selectedItem.qty" />
     <select id="uofm" class="px-2 py-2 border-2 border-gray-100 bg-green-100 rounded-md w-20 text-sm"
       v-model="selectedItem.unit">
       <option selected>g</option>
-      <option>kg</option>
       <option>tsp</option>
       <option>Tbsp</option>
       <option>mL</option>
-      <option>L</option>
       <option>ea</option>
     </select>
     <button class="button rounded-md bg-emerald-600 hover:bg-emerald-500" @click="addIngredient">add</button>
@@ -52,14 +49,18 @@
     </div>
     <div>
       <h2 class="text-lg font-semibold mt-3 mb-2">Recipe Cost</h2>
-      <p>$4.57 per batch and $2.50 per serve</p>
+      <p>${{ totalCost }} per batch and ${{ perServe }} per {{ unit }}</p>
     </div>
   </div>
 </template>
 <script setup>
 // load the ingredients on mounted??
+// ** note that i think calculating the cost here is a mistake - you will want to dynamically calculate cost of goods
 const supabase = useSupabaseClient()
-
+const props = defineProps({
+  serves: Number,
+  unit: String
+})
 const ddopen = ref(false)
 
 const query = ref('')
@@ -86,17 +87,7 @@ const setItem = (item) => {
 
 
 }
-const searchItems = async () => {
-  console.log(query.value)
-  if (!query) {
-    return 'pleae input a search query'
-  }
-  else {
-    let term = ('%' + query + '%').toString
-    let res = await supabase.from('inventory_category').select('*').order('item', { ascending: true }).filter('item', 'like', term)
-    items.value = res.data
-  }
-}
+
 const search = async () => {
   let term = `%${query.value}%`
   console.log('searching')
@@ -116,15 +107,47 @@ const addIngredient = () => {
   newItem.id = selectedItem.id;
   newItem.unit = selectedItem.unit;
   newItem.qty = selectedItem.qty;
+  newItem.uom = selectedItem.uom;
+  newItem.cost = selectedItem.last_price;
   ingredients.push(newItem)
   // clear selected Item
   selectedItem.name = "";
   selectedItem.id = 0;
   selectedItem.unit = 'g';
   selectedItem.qty = 0;
-
+  selectedItem.last_price = 0;
+  selectedItem.uom = ''
+  totalCost.value = calculateCost()
+  console.log('totalcost ', totalCost.value)
 }
+const totalCost = ref(0)
+const perServe = ref(0)
+const calculateCost = () => {
+  let cost = 0
+  for (let i = 0; i < ingredients.length; i++) {
+    if (ingredients[0].unit == ingredients[0].uom) {
+      //useable unit is the same as purchased unit
+      cost = cost + (ingredients[0].qty * ingredients[0].cost)
+    } else if
+      ((ingredients[0].unit == 'g') && (ingredients[0].uom == 'kg')) {
+      cost = cost + (ingredients[0].qty * ingredients[0].cost / 1000)
+    } else if ((ingredients[0].unit == 'g') && (ingredients[0].uom == 'mL')) {
+      // assume grams == mL
+      cost = cost + (ingredients[0].qty * ingredients[0].cost)
+    } else if ((ingredients[0].unit == 'tsp') && (ingredients[0].uom == 'g')) {
+      // assume 5g per tsp
+      cost = cost + (ingredients[0].qty * ingredients[0].cost * 5)
+    } else if ((ingredients[0].unit == 'Tbsp') && (ingredients[0].uom == 'g')) {
+      // assume 15g per Tbsp
+      cost = cost + (ingredients[0].qty * ingredients[0].cost * 15)
+    } else if ((ingredients[0].unit == 'mL') && (ingredients[0].uom == 'L')) {
+      cost = cost + (ingredients[0].qty * ingredients[0].cost / 1000)
+    }
 
+  }
+  perServe.value = (cost / props.serves).toFixed(2)
+  return cost.toFixed(2)
+}
 
 
 </script>
