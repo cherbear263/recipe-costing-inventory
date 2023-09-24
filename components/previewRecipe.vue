@@ -2,7 +2,7 @@
   <div>
     <div class="text-center">
       <h2 class="font-semibold text-3xl text-slate-700 capitalize my-3 ">{{ form.title }}</h2>
-      <a class="bg-blue-100 px-2 py-1 rounded-full text-center text-blue-600 font-semibold px-3 py-2">{{ form.category }}
+      <a class="bg-blue-100 rounded-full text-center text-blue-600 font-semibold px-3 py-2">{{ form.category }}
       </a>
     </div>
 
@@ -24,6 +24,7 @@
           </ul>
         </div>
         <div class="mt-3">
+          <recipe-directions :directions="directions" />
           <h2 class="font-semibold text-lg">Directions:</h2>
           <ul class="list-disc ml-8">
             <li v-for="direction in form.directions">{{ direction }}</li>
@@ -39,7 +40,8 @@
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Confirm</button>
       <button data-modal-hide="editRecipe" type="button" @click="editRecipe"
-        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
+        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Start
+        over</button>
     </div>
   </div>
 </template>
@@ -48,11 +50,12 @@ const props = defineProps({
   form: Object
 })
 const ingredients = props.form.ingredients;
+const directions = props.form.directions;
 const emit = defineEmits(['submit', 'edit'])
 const submit = (form) => {
   emit('submit', form)
 }
-const editRecipe = () => {
-  emit('edit')
+const editRecipe = (form) => {
+  emit('edit', form)
 }
 </script>

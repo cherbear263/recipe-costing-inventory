@@ -31,10 +31,16 @@
           </div>
           <div id="serves">
 
-            <label class="text-sm text-gray-400 mb-2">no. serves</label>
+            <label class="text-sm text-gray-400 mb-2">Yield</label>
             <input type="number" name="serves" required placeholder="serves"
               class="w-full h-10 border border-gray-400 rounded-sm px-4" v-model="form.serves" />
-
+          </div>
+          <div id="unit">
+            <label class="text-sm text-gray-400 mb-2 unit">Unit</label>
+            <select class="px-2 py-2 border border-gray-400" v-model="form.unit">
+              <option class="py-1">ea</option>
+              <option class="py-1">g</option>
+            </select>
           </div>
           <div id="temp">
 
@@ -55,6 +61,7 @@
       </fieldset>
 
       <fieldset class="mb-4">
+        <form-recipe-ingredients />
         <label class="text-sm text-gray-400 mb-2 block">Ingredients</label>
         <textarea rows="3" name="ingredients" required placeholder="rice, beans, ..."
           class="w-full border border-gray-400 rounded-sm px-4" v-model="ingredients" />
@@ -85,8 +92,8 @@ const categories = [
   'cake',
   'cookies',
   'syrup',
-  'conserve',
-  'cream'
+  'filling',
+  'bread'
 ]
 const ingredients = ref('');
 const directions = ref('');
@@ -96,6 +103,7 @@ const form = reactive({
   ingredients: [],
   directions: [],
   serves: 0,
+  unit: 'ea',
   temp: 0,
   time: 0
 })
