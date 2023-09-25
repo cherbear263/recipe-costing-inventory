@@ -47,10 +47,7 @@
         </li>
       </ul>
     </div>
-    <div>
-      <h2 class="text-lg font-semibold mt-3 mb-2">Recipe Cost</h2>
-      <p>${{ totalCost }} per batch and ${{ perServe }} per {{ unit }}</p>
-    </div>
+
   </div>
 </template>
 <script setup>
@@ -61,6 +58,7 @@ const props = defineProps({
   serves: Number,
   unit: String
 })
+const emit = defineEmits(['ingredientList'])
 const ddopen = ref(false)
 
 const query = ref('')
@@ -110,6 +108,9 @@ const addIngredient = () => {
   newItem.uom = selectedItem.uom;
   newItem.cost = selectedItem.last_price;
   ingredients.push(newItem)
+  emit('ingredientList', ingredients)
+
+
   // clear selected Item
   selectedItem.name = "";
   selectedItem.id = 0;

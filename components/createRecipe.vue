@@ -29,8 +29,10 @@
   </div>
 </template>
 <script setup>
+const supabase = useSupabaseClient()
 const emit = defineEmits(['modalClose', 'confirmForm'])
 const preview = ref(false)
+const loading = ref(false)
 let checkForm = {}
 const confirm = ref(false)
 const close = () => {
@@ -39,13 +41,46 @@ const close = () => {
 const previewForm = (form) => {
   checkForm = form
   preview.value = true
-  console.log('previewing form', checkForm)
+
 
 }
-const submit = (form) => {
-  console.log('submit form to supabase', form)
+const recipeID = ref(null)
+const getId = async () => {
+  let { data } = await supabase.from('recipes')
+    .insert([
+      { name: checkForm.title, serves: checkForm.serves, unit: checkForm.unit, time: checkForm.time, temp: checkForm.temp, directions: checkForm.directions, type: checkForm.category },
+    ]).select().single()
+  if (data) {
+    recipeID.value = data.id
+  }
+}
+const submit = async () => {
+  await getId()
+
+  // add ingredients to recipe_ingredients table
+  let ingredients = checkForm.ingredients
+
+  try {
+    loading.value = true
+    for (let i = 0; i < ingredients.length; i++) {
+      let { error } = await supabase.from('recipe_ingredients')
+        .insert([
+          { recipe: recipeID.value, ingredient: ingredients[i].id, qty: ingredients[i].qty, unit: ingredients[i].unit },
+        ])
+      if (error) throw error
+    }
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+    preview.value = false
+    close()
+    navigateTo('/recipes')
+  }
+
 }
 const editRecipe = () => {
   preview.value = false
+  navigateTo('/recipes')
 }
 </script>

@@ -1,6 +1,16 @@
-# Nuxt 3 Minimal Starter
+# Nuxt 3 Recipe Costing App
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+- can add a recipe
+- will look up ingredients in inventory
+- can calculate the cost of the recipe (though I think I need ot chnage htis system)
+
+## To do
+
+- upload the recipe to the database
+- view recipes
+- edit recipes
+- fillings and other recipes should be added to the inventory (e.g. if you were to make a ham and cheese croissant you would need to have enough home-made croissants!)
+- I wonder if I should make the calculate cost exist in a store so that I can access it anywhere?
 
 ## Setup
 

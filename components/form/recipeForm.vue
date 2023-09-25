@@ -9,11 +9,11 @@
       <fieldset class="mb-4">
         <div class="flex justify-center gap-3">
           <div id="category-button " class="mt-6">
-            <button id="dropdownHoverButton" @click="dropCat = !dropCat" data-dropdown-toggle="dropdownHover"
-              data-dropdown-trigger="hover"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="button">{{ form.category }} <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <button type="button" id="dropdownHoverButton" @click="dropCat = !dropCat"
+              data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ form.category }}
+              <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 10 6">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m1 1 4 4 4-4" />
               </svg></button>
@@ -32,8 +32,8 @@
           <div id="serves">
 
             <label class="text-sm text-gray-400 mb-2">Yield</label>
-            <input type="number" name="serves" required placeholder="serves"
-              class="w-full h-10 border border-gray-400 rounded-sm px-4" v-model="form.serves" />
+            <input type="number" name="serves" class="w-full h-10 border border-gray-400 rounded-sm px-4"
+              v-model="form.serves" />
           </div>
           <div id="unit">
             <label class="text-sm text-gray-400 mb-2 unit">Unit</label>
@@ -61,7 +61,7 @@
       </fieldset>
 
       <fieldset class="mb-4">
-        <form-recipe-ingredients :serves="form.serves" :unit="form.unit" />
+        <form-recipe-ingredients :serves="form.serves" :unit="form.unit" @ingredient-list="saveIngredients" />
       </fieldset>
       <fieldset class="mb-4">
         <label class="text-md font-semibold mb-2 block">Directions <span class="text-gray-400 font-normal"> use '#' for
@@ -71,7 +71,7 @@
           class="w-full border border-gray-400 rounded-sm px-4" v-model="directions" />
       </fieldset>
       <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button data-modal-hide="defaultModal" @click.prevent="preview"
+        <button type="button" data-modal-hide="defaultModal" @click.prevent="preview"
           class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           View Preview</button>
         <button data-modal-hide="cancelRecipe" type="button" @click="cancelRecipe"
@@ -94,7 +94,7 @@ const categories = [
   'filling',
   'bread'
 ]
-const ingredients = ref('');
+
 const directions = ref('');
 const form = reactive({
   title: "",
@@ -106,6 +106,9 @@ const form = reactive({
   temp: 0,
   time: 0
 })
+const saveIngredients = (items) => {
+  form.ingredients = items
+}
 const cancelRecipe = () => {
   form.title = ""
   form.category = "category"
@@ -121,7 +124,6 @@ const cancelRecipe = () => {
 
 const preview = () => {
   isLoading.value = true;
-  form.ingredients = ingredients.value.split(/\r?\n|\r|\n/g);
   form.directions = directions.value.split(/\r?\n|\r|\n/g);
   emit('preview', form)
   // the following was from a tutorial for app write. Will need to be redesigned for supabase
