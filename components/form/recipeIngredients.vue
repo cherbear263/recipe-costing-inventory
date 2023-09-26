@@ -41,7 +41,7 @@
       <h2 class="text-lg font-semibold mt-3 mb-2">Ingredients</h2>
       <ul class="list-disc ml-5 pb-2 w-full">
         <li class="w-full relative" v-for="(ingredient, index) in ingredients" :key="index">
-          <p class="w-full">{{ ingredient.qty }}{{ ingredient.unit }} {{ ingredient.name }}</p>
+          <p class="w-full">{{ ingredient.qty }} {{ ingredient.unit }} {{ ingredient.name }}</p>
           <Icon name="mdi:delete" class="text-red-200 hover:text-red-500 cursor-pointer absolute right-0 top-1"
             @click="removeIngredient(index)" />
         </li>
@@ -54,10 +54,7 @@
 // load the ingredients on mounted??
 // ** note that i think calculating the cost here is a mistake - you will want to dynamically calculate cost of goods
 const supabase = useSupabaseClient()
-const props = defineProps({
-  serves: Number,
-  unit: String
-})
+const props = defineProps(['serves', 'unit'])
 const emit = defineEmits(['ingredientList'])
 const ddopen = ref(false)
 

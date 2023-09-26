@@ -100,7 +100,7 @@ const form = reactive({
   title: "",
   category: "category",
   ingredients: [],
-  directions: [],
+  directions: {},
   serves: 0,
   unit: 'ea',
   temp: 0,
@@ -113,7 +113,7 @@ const cancelRecipe = () => {
   form.title = ""
   form.category = "category"
   form.ingredients = []
-  form.directions = []
+  form.directions = {}
   form.serves = 0
   form.temp = 0
   form.time = 0

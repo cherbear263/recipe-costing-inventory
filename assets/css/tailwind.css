@@ -1,7 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@font-face {
+  font-family: "Amsterdam";
+  src: url("Amsterdam.ttf");
+}
+@font-face {
+  font-family: "jaldi-bold";
+  src: url("Jaldi-Bold.ttf");
+}
+@font-face {
+  font-family: "jaldi";
+  src: url("Jaldi-Regular.ttf");
+}
+.display {
+  font-family: "Amsterdam";
+}
+@layer base {
+  html {
+    font-family: "jaldi", Helvetica, Arial, sans-serif;
+  }
+}
 @layer components {
   .button {
     @apply px-3 py-2 rounded-md shadow-sm bg-blue-600 hover:bg-blue-500 text-white cursor-pointer transition ease-in-out;

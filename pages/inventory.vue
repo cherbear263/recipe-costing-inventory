@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="relative overflow-x-auto">
+  <div class="relative">
     <h2 class="text-2xl font-semibold mx-auto text-center">Inventory</h2>
     <div class="w-1/2 mx-auto">
       <SearchDropdown @changeCategory="getCategory" @searchItem="setSearch" />
@@ -59,6 +59,9 @@
   </div>
 </template>
 <script setup>
+definePageMeta({
+  layout: "dashboard",
+});
 import debounce from 'lodash.debounce'
 const supabase = useSupabaseClient()
 const orderItems = []
