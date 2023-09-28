@@ -74,6 +74,10 @@
     </div>
     <div class="col-span-5">
       <theTopBar />
+      <transition name="toast">
+        <toast v-if="userStore.showToast" :toastColor="userStore.toastColor" :toastMsg=userStore.toastMsg />
+      </transition>
+
     </div>
     <div class="col-span-1">
       <theSidebar />
@@ -84,4 +88,8 @@
   </div>
 </template>
 <script setup>
+import { useUserStore } from '~/stores/user';
+const userStore = useUserStore()
+const client = useSupabaseClient()
+const user = useSupabaseUser()
 </script>
